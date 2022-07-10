@@ -1,0 +1,51 @@
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+background-image: linear-gradient(100deg, #a053a0, #5a359f);
+font-family: "Poppins", sans-serif;
+}
+
+#accordionExample{
+    margin-bottom: 200px;
+}
+
+.btn-login {
+font-size: 0.9rem;
+letter-spacing: 0.05rem;
+padding: 0.75rem 1rem;
+}
+
+.btn-google {
+color: white !important;
+background-color: #ea4335;
+}
+
+.btn-facebook {
+color: white !important;
+background-color: #3b5998;
+}
+
+footer {
+background-color: transparent;
+color: rgb(0, 0, 0);
+height: 20vh;
+display: flex;
+flex-direction: row;
+justify-content: space-evenly;
+align-items: center;
+flex-wrap: wrap;
+}
+
+footer .social-links a {
+text-decoration: none;
+color: rgb(0, 0, 0);
+padding: 10px;
+}
+
+footer .social-links a:hover {
+color: #2f9ee5;
+}
