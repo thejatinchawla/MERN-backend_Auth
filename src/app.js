@@ -7,16 +7,19 @@ const path = require("path")
 require("./db/conn")
 const Details = require("./models/details")
 const bcrypt = require("bcrypt")
+const cookieParser = require('cookie-parser')
+const auth = require("./middlewares/auth")
 
 const staticPath = path.join(__dirname,"../public")
 app.use(express.static(staticPath))
+app.use(express.urlencoded({extended:false}))
+app.use(cookieParser())
 
 const viewPath = path.join(__dirname,"../templates/views")
 const partialsPath = path.join(__dirname,"../templates/partials")
 app.set("view engine", "hbs")
 app.set("views", viewPath)
 hbs.registerPartials(partialsPath)
-app.use(express.urlencoded({extended:false}))
 
 app.get("/",(req,res)=>{
     res.render("main")
@@ -26,6 +29,33 @@ app.get("/signup",(req,res)=>{
 })
 app.get("/login",(req,res)=>{
     res.render("login")
+}) 
+
+app.get("/LoginMain",(req,res)=>{
+    res.render("LoginMain")
+}) 
+
+app.get("/logout", auth, async(req,res)=>{
+    try {
+        // console.log(req.user);
+        // console.log(req.token);
+        // req.users.tokens = req.users.tokens.filter((currentObject)=>{
+        //     return currentObject.token !== req.token   
+        // })
+        res.clearCookie("loginJWT")
+        console.log("Logout success");
+        await req.user.save()
+        res.render("login")
+    } catch (error) {
+        res.status(401).send(error)
+    }
+}) 
+
+
+
+app.get("/secret", auth , (req,res)=>{
+    console.log(`cookie : ${req.cookies.loginJWT}`);
+    res.send("Im a secret fucking website")
 }) 
 
 app.post("/signup", async (req,res)=>{
@@ -43,7 +73,12 @@ app.post("/signup", async (req,res)=>{
             })
 
             const token = await dataSave.generateJWT()
-            console.log(`Signup token : ${token}`);
+            console.log(`Signup token : ${token}`)
+
+            res.cookie("signupJWT", token , {
+                expires:new Date(Date.now() + 2000000),
+                httpOnly:true
+            })
 
             const datasaved = await dataSave.save()
             console.log(datasaved);
@@ -52,7 +87,6 @@ app.post("/signup", async (req,res)=>{
         else{
             res.send("passwords are not matching")
         }
-
     } catch (error) {
         console.log(error);
         res.status(400).send(error)
@@ -68,10 +102,16 @@ app.post("/login", async(req,res)=>{
         
         const passwordMatch = await bcrypt.compare(password,userDetail.password)
         const token = await userDetail.generateJWT()
-            console.log(`login token : ${token}`)
+        console.log(`login token : ${token}`)
         
+        res.cookie("loginJWT", token, {
+            expires:new Date(Date.now() + 2000000),
+            httpOnly:true,
+        })
+        
+
         if (passwordMatch){
-            res.status(201).render("main")
+            res.status(201).render("LoginMain")
         }
         else{
             res.send("incorrect password")
