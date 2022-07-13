@@ -39,14 +39,14 @@ app.get("/logout", auth, async(req,res)=>{
     try {
 
         // for deleting existing account (token)
-        // console.log(req.user);
-        // console.log(req.token);
-        // req.user.tokens = req.user.tokens.filter((currentObject)=>{
-        //     return currentObject.token !== req.token   
-        // })
+        console.log(req.user);
+        console.log(req.token);
+        req.user.tokens = req.user.tokens.filter((currentObject)=>{
+            return currentObject.token !== req.token   
+        })
 
         // deleting entire token 
-        req.user.tokens = []
+        // req.user.tokens = []
         
         res.clearCookie("loginJWT")
         console.log("Logout success");
@@ -55,13 +55,6 @@ app.get("/logout", auth, async(req,res)=>{
     } catch (error) {
         res.status(401).send(error)
     }
-}) 
-
-
-
-app.get("/secret", auth , (req,res)=>{
-    console.log(`cookie : ${req.cookies.loginJWT}`);
-    res.send("Im a secret fucking website")
 }) 
 
 app.post("/signup", async (req,res)=>{
@@ -123,7 +116,7 @@ app.post("/login", async(req,res)=>{
             res.send("incorrect password")
         }
     } catch (error) {
-        res.status(400).send("invalid details fuck off and an error occured")
+        res.status(400).send("invalid details")
         console.log(`error : ${error}`);
     }
 })
