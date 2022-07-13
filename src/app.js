@@ -37,11 +37,17 @@ app.get("/LoginMain",(req,res)=>{
 
 app.get("/logout", auth, async(req,res)=>{
     try {
+
+        // for deleting existing account (token)
         // console.log(req.user);
         // console.log(req.token);
-        // req.users.tokens = req.users.tokens.filter((currentObject)=>{
+        // req.user.tokens = req.user.tokens.filter((currentObject)=>{
         //     return currentObject.token !== req.token   
         // })
+
+        // deleting entire token 
+        req.user.tokens = []
+        
         res.clearCookie("loginJWT")
         console.log("Logout success");
         await req.user.save()
