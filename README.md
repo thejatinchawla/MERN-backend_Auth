@@ -1,5 +1,25 @@
-# Nodejs-backend_Auth
+# Authorization Authentication Backend
 
+An authentication and authorization backend server build using Express in NodeJS and uses MongoDB to store user dabtabase.
+
+
+## Features
+
+- user can signup
+- user can login and get their JWT token to authorized themselves
+- verify JWT token (authozrization)
+
+## Additional Features
+
+- can be scale to microservice architecture easily
+- can be used by any other service to authenticate and for authorization
+
+
+## Author
+
+* **Jatin Chawla**
+
+## License
 MIT License
 
 Copyright (c) 2022 Jatin Chawla
